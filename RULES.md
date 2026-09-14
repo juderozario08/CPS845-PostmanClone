@@ -1,97 +1,85 @@
 # Team Development Guidelines & Repository Rules
 
-This document outlines our repository structure, branch protection rules, branch naming standards, and the day-to-day Scrum workflow for our 4-person team.
+This document outlines our repository branching policies, branch naming standards, pull request conventions, and the day-to-day Scrum workflow for our 4-person team.
 
 ---
 
 ## 1. Branch Architecture & Protection Policies
 
-| Branch | Purpose | Permissions & Protection Rules |
+Our repository maintains two permanent primary branches: `main` and `dev`.
+
+| Branch | Role | Rules & Permissions |
 | :--- | :--- | :--- |
-| **`main`** | **Production** | • **Strictly Admin Only**: No direct pushes from non-admins.<br>• All code updates and merges into `main` must be performed by the repository admin.<br>• Branch deletions and force pushes (`git push --force`) are blocked. |
-| **`dev`** | **Staging / Integration** | • **Pull Requests Required** for team members (direct pushes blocked).<br>• **No Reviews / Approvals Required (0 approvals)**: Teammates may merge their own PRs once ready.<br>• **Admin Bypass**: The repository admin has bypass access to push directly if hotfixes or quick adjustments are needed.<br>• Branch deletions and force pushes are blocked. |
-| **Feature / Ticket Branches** | **Active Work** | • Short-lived branches created off `dev`.<br>• Deleted automatically upon merging the PR into `dev`. |
+| **`main`** | **Production** | • **PR Required**: All updates must come through a Pull Request. Direct pushes are blocked.<br>• **Source**: Merges into `main` should only originate from `dev`.<br>• **Permanent**: This branch can **never** be deleted.<br>• Anyone on the team can merge the PR once ready. |
+| **`dev`** | **Staging / Integration** | • **PR Required**: All ticket work must be merged into `dev` through a Pull Request. Direct pushes are blocked.<br>• **Permanent**: This branch can **never** be deleted.<br>• No peer approvals are required; authors can merge their own PRs once ready. |
+
+> **Note on Enforcement:** Aside from requiring a Pull Request for updates, blocking direct pushes, and preventing branch deletion on `dev` and `main`, no other restrictions or review approval thresholds are enforced.
 
 ---
 
 ## 2. Branch Naming Conventions
 
-When starting a ticket, create a branch off the latest `dev` branch using the following format:
+When picking up a ticket or task, create a dedicated branch cut from the latest `dev`. 
 
-```text
+Branches must follow the pattern:
+```
 <type>-<your_name>-<what_you_worked_on>
 ```
 
-### Allowed Types
-
-* `feat` — Adding a new feature, endpoint, or UI component.
-* `bug` — Fixing a defect, crash, or unexpected behavior.
-* `refactor` — Code cleanup, performance optimization, or restructuring with no external behavior changes.
+### Allowed Branch Types
+* **`feat-`**: New features, UI additions, or functionality.
+* **`bug-`**: Fixes for existing issues, defects, or broken functionality.
+* **`refactor-`**: Code restructuring, cleanup, performance enhancements, or technical debt removal without changing user-facing behavior.
 
 ### Examples
-
-* `feat-alex-user_auth_modal`
-* `bug-sam-login_token_expiry`
-* `refactor-jordan-database_queries`
-
-> **Note:** Keep the description brief, lowercase, and separated by underscores or dashes.
+* `feat-alex-user-authentication`
+* `bug-sam-cart-checkout-crash`
+* `refactor-jordan-api-service-layer`
 
 ---
 
-## 3. Pull Request (PR) Requirements
+## 3. Pull Request Guidelines
 
-Before merging any ticket into `dev`, open a Pull Request adhering to these rules:
+Whenever you are ready to integrate your changes into `dev` (or when staging changes are prepared for `main`), open a Pull Request.
 
-1. **Target Base:** Always target **`dev`** as the base branch (never target `main`).
-2. **Link GitHub Issues / Work Items:**
-   * Reference the related issue number in the PR description using auto-close keywords (e.g., `Closes #12`, `Fixes #45`, or `Relates to #34`).
-3. **Screenshots & Media:**
-   * Attach screenshots, screen recordings, or GIFs for any UI or visual updates.
-   * Attach API response samples, logs, or terminal outputs for backend/schema changes when applicable.
-4. **Self-Review & Merge:**
-   * Since formal peer approvals are not required (0 approvals needed), do a self-review of your changes in the **Files changed** tab.
-   * Verify all conversation threads or checkmarks are clean.
-   * Click **Squash and merge** to keep the `dev` commit history clean.
+### What to Include in Every PR
+1. **Clear Description**: Briefly explain the changes made and the problem solved.
+2. **Linked Work Items**: Directly link the corresponding GitHub issue or ticket (e.g., `Closes #12` or `Resolves #45`) so the project board updates automatically.
+3. **Attachments & Proof**:
+   * For frontend/UI changes: Attach screenshots, GIFs, or short screen recordings demonstrating the change.
+   * For backend/API changes: Include console output, test run logs, or Postman/cURL responses showing success.
 
 ---
 
-## 4. Standard Scrum Team Workflow
+## 4. Daily Scrum Workflow
 
-Follow this step-by-step lifecycle for every ticket:
+1. **Sync Local Workspace**
+   Always make sure your local staging branch is up to date before starting:
+   ```bash
+   git checkout dev
+   git pull origin dev
+   ```
 
-### Step 1: Sync Your Local Environment
-Before starting a new ticket, ensure your local `dev` is up to date:
-```bash
-git checkout dev
-git pull origin dev
-```
+2. **Create a Working Branch**
+   ```bash
+   git checkout -b feat-<your_name>-<what_you_worked_on>
+   ```
 
-### Step 2: Create Your Working Branch
-Cut your branch off `dev` using the naming convention:
-```bash
-git checkout -b feat-yourname-ticket_description
-```
+3. **Develop & Commit**
+   Keep commit messages concise and descriptive:
+   ```bash
+   git add .
+   git commit -m "feat: implement user login form validation"
+   ```
 
-### Step 3: Develop & Commit
-Commit your work regularly with clear commit messages:
-```bash
-git add .
-git commit -m "feat: add user authentication form validation"
-```
+4. **Push Branch & Open PR to `dev`**
+   ```bash
+   git push -u origin feat-<your_name>-<what_you_worked_on>
+   ```
+   * Open a PR on GitHub with the base set to **`dev`**.
+   * Fill out the description, link your issue, and attach media/verification proofs.
+   * Merge your PR into `dev` once finished.
 
-### Step 4: Push to GitHub & Open a PR
-Push your local branch to GitHub:
-```bash
-git push -u origin feat-yourname-ticket_description
-```
-1. Open the repository on GitHub and click **Compare & pull request**.
-2. Ensure the base branch dropdown is set to **`dev`**.
-3. Link the relevant issue number and attach screenshots/logs if applicable.
-
-### Step 5: Merge into `dev`
-Once your checks pass and you have self-verified the code, click **Squash and merge**. GitHub will automatically delete your feature branch.
-
-### Step 6: Production Release to `main` (Admin Only)
-At the end of a sprint or milestone:
-1. The **repository admin** opens and reviews a PR from `dev` into `main` (or merges directly).
-2. Code deployed to `main` represents the stable production release.
+5. **Release to `main`**
+   * Periodically, after features are validated together on `dev`, open a PR from **`dev`** into **`main`**.
+   * Any team member can merge this PR into `main` to deploy or release to production.
