@@ -1,0 +1,29 @@
+{
+  "name": "postman",
+  "version": "1.0.0",
+  "description": "CPS 845 Group Project",
+  "homepage": "https://github.com/juderozario08/cps845groupproject#readme",
+  "bugs": {
+    "url": "https://github.com/juderozario08/cps845groupproject/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juderozario08/cps845groupproject.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prestart": "npm run build",
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "electron": "^44.4.3",
+    "typescript": "^7.0.2"
+  }
+}
