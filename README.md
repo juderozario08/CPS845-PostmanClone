@@ -1,5 +1,3 @@
-# cps845groupproject
-CPS 845 Group Project
 # Postman Clone (CPS 845 Group Project)
 
 A desktop Postman clone built with Electron and TypeScript for CPS 845.
