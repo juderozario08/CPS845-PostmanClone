@@ -17,8 +17,8 @@ Ensure you have the following installed on your machine:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/juderozario08/cps845groupproject.git
-cd cps845groupproject
+git clone https://github.com/juderozario08/CPS845-PostmanClone.git
+cd CPS845-PostmanClone
 ```
 
 ### 2. Check out the Appropriate Branch
